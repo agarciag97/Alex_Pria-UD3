@@ -8,7 +8,9 @@ using Unity.MLAgents.Actuators;
 public class MoveToTargetAgent : Agent
 {
     [SerializeField] private Transform target;
-        public override void CollectObservations(VectorSensor sensor)
+    [SerializeField] private SpriteRenderer backgroundSpriteRenderer;
+
+    public override void CollectObservations(VectorSensor sensor)
         {
             sensor.AddObservation((Vector2)transform.localPosition);
             sensor.AddObservation((Vector2)target.localPosition);
@@ -28,11 +30,13 @@ public class MoveToTargetAgent : Agent
         if (collision.TryGetComponent(out Target target))
         {
             AddReward(10f);
+            backgroundSpriteRenderer.color = Color.green;
             EndEpisode();
         }
         else if (collision.TryGetComponent(out Wall wall))
         {
-            AddReward(-1f);
+            AddReward(-2f);
+            backgroundSpriteRenderer.color = Color.red;
             EndEpisode();
         }
     }
